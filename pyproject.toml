@@ -1,0 +1,26 @@
+[project]
+name = "rag_evaluator"
+version = "0.1.0"
+description = "CLI and evaluation toolkit for retrieval-augmented generation (RAG) systems"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "typer",               # CLI
+    "beautifulsoup4",      # 可选，解析 HTML/PDF
+    "pdfplumber",           # PDF 解析
+    "requests",             # 网络请求
+    "python-dotenv",        # 环境变量管理
+    "datasets",             # 加载数据集
+    "numpy",                # 数值计算
+    "scikit-learn",         # cosine_similarity 等
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",                 # 代码检查
+    "black",                # 代码格式化
+    "isort",                # 导入排序
+]
+
+[project.scripts]
+、evaluator = "evaluation.cli:app" 
