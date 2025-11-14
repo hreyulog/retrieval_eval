@@ -23,4 +23,4 @@ dev = [
 ]
 
 [project.scripts]
-、evaluator = "evaluation.cli:app" 
+evaluator = "evaluation.cli:app" 
