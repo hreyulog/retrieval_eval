@@ -5,7 +5,7 @@ import time
 from tqdm import tqdm
 from math import ceil
 import numpy
-from geomas.encoder.encoder import Encoder
+from .encoder_cls import Encoder
 import logging
 logger = logging.getLogger(__name__)
 

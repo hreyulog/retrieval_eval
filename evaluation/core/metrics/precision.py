@@ -1,5 +1,5 @@
 from typing import List, Dict
-from geomas.evaluation.evaluation.core.metrics.ranking_metric import RankingMetric
+from .ranking_metric import RankingMetric
 
 class PrecisionAtK(RankingMetric):
     def __init__(self, k: int = 5):
@@ -7,7 +7,7 @@ class PrecisionAtK(RankingMetric):
         self.k = k
 
     def get_name(self) -> str:
-        return f"precision"
+        return f"precision@{self.k}"
 
     def compute(self, pred_sorted_doc_ids: List[str], relevant_doc_ids: Dict[str, float]) -> float:
         """

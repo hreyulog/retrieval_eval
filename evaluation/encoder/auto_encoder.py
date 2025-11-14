@@ -1,7 +1,7 @@
 from typing import Dict, List
 import torch
-from geomas.encoder.encoder import Encoder
-from geomas.encoder.pooling.pooling_config import Encoder
+from .encoder_cls import Encoder
+from evaluation.encoder.pooling.pooling_config import create_pooling
 
 from transformers import AutoTokenizer, AutoModel
 from tqdm import tqdm

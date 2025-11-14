@@ -1,8 +1,7 @@
 from typing import List, Dict
-from geomas.evaluation.evaluation.core.metrics.ranking_metric import RankingMetric
+from .ranking_metric import RankingMetric
 
 class MRR(RankingMetric):
-
     def get_name(self) -> str:
         return "mrr"
 

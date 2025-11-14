@@ -1,4 +1,4 @@
-from geomas.encoder.pooling.pooling import Pooling
+from .pooling_cls import Pooling
 import torch
 
 class ClsPooling(Pooling):

@@ -1,5 +1,5 @@
 from typing import List, Dict
-from geomas.evaluation.evaluation.core.metrics.ranking_metric import RankingMetric
+from .ranking_metric import RankingMetric
 
 class F1AtK(RankingMetric):
     def __init__(self, k: int = 5):

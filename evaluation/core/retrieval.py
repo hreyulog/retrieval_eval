@@ -1,8 +1,8 @@
 import time
 from typing import Dict, List
-from encoder.encoder_config import create_encode
-from dataset import TestDataset
-from metrics.metrics_config import create_metrics  
+from ..encoder.encoder_config import create_encode
+from .dataset import TestDataset
+from .metrics.metrics_config import create_metrics  
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -13,7 +13,7 @@ class RetrievalEvaluator:
     and records retrieval time.
     """
 
-    def __init__(self, dataset: str, embedding_model: str, top_k: int = 5, metrics: list=["recall@1","recall@5","mrr","ndcg"]):
+    def __init__(self, dataset: str, embedding_model: str, top_k: int = 5, metrics: list=["recall@1","recall@5","mrr","ndcg","f1","precision@3"]):
         """
         Args:
             dataset (str): Dataset name or path for evaluation.
@@ -52,11 +52,9 @@ class RetrievalEvaluator:
         predictions = {}
         sim_matrix = cosine_similarity(query_embeddings, doc_embeddings)
 
-        doc_ids = [d["doc_id"] for d in self.test_dataset.docs]
+        doc_ids = [d for d in list(self.test_dataset.docs.keys())]
 
-        for i, query in enumerate(self.test_dataset.queries):
-            query_id = query["query_id"]
-
+        for i, query_id in enumerate(list(self.test_dataset.docs.keys())):
             top_indices = np.argsort(sim_matrix[i])[::-1][:self.top_k]
             top_doc_ids = [doc_ids[idx] for idx in top_indices]
 
@@ -72,15 +70,12 @@ class RetrievalEvaluator:
             Dict[str, float]: Metrics including Recall@K, Precision@K, MRR, nDCG, retrieval_time_sec
         """
         start_time = time.time()
-        query_texts = [q["query_text"] for q in self.test_dataset.queries]
-        doc_texts = [d["text"] for d in self.test_dataset.docs]
-        query_embeddings = self.get_embedding(query_texts)
-        doc_embeddings = self.get_embedding(doc_texts)
+        query_embeddings = self.get_embedding(list(self.test_dataset.queries.values()))
+        doc_embeddings = self.get_embedding(list(self.test_dataset.docs.values()))
 
         predictions = self.search(query_embeddings, doc_embeddings)
 
-        for query in self.test_dataset.queries:
-            qid = query["query_id"]
+        for qid in list(self.test_dataset.queries.keys()):
             pred_docs = predictions.get(qid, [])
             relevant_docs = self.test_dataset.get_relevant_docs(qid)  
             for metric in self.metrics_list:

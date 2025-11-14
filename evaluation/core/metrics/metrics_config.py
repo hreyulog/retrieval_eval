@@ -1,16 +1,17 @@
 import re
-from geomas.evaluation.evaluation.core.metrics.mrr import MRR
-from geomas.evaluation.evaluation.core.metrics.ndcg import NDCG
-from geomas.evaluation.evaluation.core.metrics.precision import PrecisionAtK
-from geomas.evaluation.evaluation.core.metrics.recall import RecallAtK
-from geomas.evaluation.evaluation.core.metrics.ranking_metric import RankingMetric
-
+from .mrr import MRR
+from .ndcg import NDCG
+from .precision import PrecisionAtK
+from .recall import RecallAtK
+from .ranking_metric import RankingMetric
+from .f1 import F1AtK
 # 基本工厂，只存类，不存具体 K 值
 _BASE_FACTORIES = {
-    MRR.get_name():MRR, 
-    NDCG.get_name():NDCG, 
-    PrecisionAtK.get_name():PrecisionAtK, 
-    RecallAtK.get_name():RecallAtK
+    'mrr':MRR, 
+    'ndcg':NDCG, 
+    'precision':PrecisionAtK, 
+    'recall':RecallAtK,
+    'f1':F1AtK
 }
 
 def create_metrics(name: str) -> RankingMetric:

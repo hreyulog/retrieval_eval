@@ -1,4 +1,4 @@
-from geomas.encoder.encoder import Encoder
+from .encoder_cls import Encoder
 
 
 class ClipEncoder(Encoder):

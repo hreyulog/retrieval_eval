@@ -1,7 +1,7 @@
-from geomas.encoder.auto_encoder import AutoModelEncoder
-from geomas.encoder.clip_encoder import ClipEncoder
-from geomas.encoder.sentencetransformer_encoder import SentencetransformerEncoder
-from geomas.encoder.api_encoder import ApiEncoder
+from .auto_encoder import AutoModelEncoder
+from .clip_encoder import ClipEncoder
+from .sentencetransformer_encoder import SentencetransformerEncoder
+from .api_encoder import ApiEncoder
 
 _FACTORIES = {
     ApiEncoder.code_name(): ApiEncoder,

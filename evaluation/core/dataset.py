@@ -23,20 +23,25 @@ class TestDataset:
         self.docs = self._load_index(index_path)
         self.annotations = self._load_annotations(annotations_path)
 
-    def _load_queries(self, query_path) -> List[Dict]:
-        queries=pd.read_csv(query_path)
-        return queries["query"].tolist()
+    def _load_queries(self, query_path) -> Dict[str, str]:
+        queries = pd.read_csv(query_path)
+        return {str(row["query_id"]): row["query"] for _, row in queries.iterrows()}
+
 
     def _load_index(self, index_path) -> Dict[str, str]:
-        docs=[json.loads(line)["doc"] for line in open(index_path, "r", encoding="utf-8")]
-        return docs
+        index = {}
+        with open(index_path, "r", encoding="utf-8") as f:
+            for line in f:
+                item = json.loads(line)
+                index[str(item["doc_id"])] = item["code"]
+        return index
 
     def _load_annotations(self, annotations_path) -> Dict[str, Dict[str,float]]:
         annotations = {}
         with open(annotations_path, "r", encoding="utf-8") as f:
             for line in f:
                 ann = json.loads(line)
-                annotations[ann["query_id"]] = ann.get("relevant_doc_ids",{})
+                annotations[str(ann["query_id"])] = ann.get("doc_id2rels",{})
         return annotations
 
     def get_query(self, query_id: str) -> Optional[str]:

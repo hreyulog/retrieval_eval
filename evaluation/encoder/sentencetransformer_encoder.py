@@ -1,6 +1,6 @@
 from typing import Dict, List
 import torch
-from geomas.encoder.encoder import Encoder
+from .encoder_cls import Encoder
 import logging
 import numpy
 

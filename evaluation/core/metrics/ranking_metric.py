@@ -6,7 +6,7 @@ class RankingMetric(abc.ABC):
     def __init__(self):
         self.total = 0.0
         self.count = 0
-    
+        
     def get_name(self) ->str:
         raise NotImplementedError('Not Implemented')
     

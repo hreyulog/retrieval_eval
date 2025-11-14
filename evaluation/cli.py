@@ -11,16 +11,16 @@ app = typer.Typer(
 
 @app.command()
 def eval_retrieval(
-    dataset: str = typer.Argument(help="Dataset for retrieval evaluation"),
-    embedding_model: str = typer.Argument(help="Embedding model path"),
-    top_k: int = typer.Option(5, help="Top-K documents to consider for recall"),
+    dataset: str = typer.Option(..., "--dataset", help="Dataset for retrieval evaluation"),
+    embedding_model: str = typer.Option(..., "--embedding_model", help="Embedding model path"),
+    top_k: int = typer.Option(5,"--top_k", help="Top-K documents to consider for recall"),
 ):
     """
     Evaluate the retrieval performance of the RAG system.
     Metrics include Recall@K, Precision@K, MRR, etc.
     Also records retrieval time.
     """
-    logger = Logger.create(source=dataset)
+    logger = Logger.create(source=dataset,results_dir='.')
     logger.info(f"Starting retrieval evaluation on {dataset} with top-{top_k}")
 
     evaluator = RetrievalEvaluator(dataset=dataset, embedding_model=embedding_model, top_k=top_k)
