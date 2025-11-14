@@ -33,7 +33,7 @@ class TestDataset:
         with open(index_path, "r", encoding="utf-8") as f:
             for line in f:
                 item = json.loads(line)
-                index[str(item["doc_id"])] = item["code"]
+                index[str(item["doc_id"])] = item["doc"]
         return index
 
     def _load_annotations(self, annotations_path) -> Dict[str, Dict[str,float]]:
