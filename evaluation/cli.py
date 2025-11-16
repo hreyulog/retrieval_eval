@@ -1,6 +1,7 @@
 import typer
 import time
 from evaluation.core.utils.logger import Logger
+from pathlib import Path
 
 from evaluation.core.retrieval import RetrievalEvaluator
 
@@ -20,7 +21,7 @@ def eval_retrieval(
     Metrics include Recall@K, Precision@K, MRR, etc.
     Also records retrieval time.
     """
-    logger = Logger.create(source=dataset,results_dir='.')
+    logger = Logger.create(source=dataset)
     logger.info(f"Starting retrieval evaluation on {dataset} with top-{top_k}")
 
     evaluator = RetrievalEvaluator(dataset=dataset, embedding_model=embedding_model, top_k=top_k)

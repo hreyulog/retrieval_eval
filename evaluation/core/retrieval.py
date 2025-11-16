@@ -53,8 +53,7 @@ class RetrievalEvaluator:
         sim_matrix = cosine_similarity(query_embeddings, doc_embeddings)
 
         doc_ids = [d for d in list(self.test_dataset.docs.keys())]
-
-        for i, query_id in enumerate(list(self.test_dataset.docs.keys())):
+        for i, query_id in enumerate(list(self.test_dataset.queries.keys())):
             top_indices = np.argsort(sim_matrix[i])[::-1][:self.top_k]
             top_doc_ids = [doc_ids[idx] for idx in top_indices]
 
