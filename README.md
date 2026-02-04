@@ -33,7 +33,7 @@ python download_arkts_ds.py
 ```
 
 
-### Step 3: Verify Installation
+### Step 3: Run evaluation
 
 ```bash
 evaluator eval-retrieval --dataset ./arktscodesearch --embedding_model google/embeddinggemma-300m
