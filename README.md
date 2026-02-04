@@ -26,10 +26,17 @@ cd retrieval_eval
 pip install -e .
 ```
 
+### Step 2.1: For arkts dataset you can run
+
+```python
+python download_arkts_ds.py
+```
+
+
 ### Step 3: Verify Installation
 
 ```bash
-evaluator --help
+evaluator eval-retrieval --dataset ./arktscodesearch --embedding_model google/embeddinggemma-300m
 ```
 
 ---

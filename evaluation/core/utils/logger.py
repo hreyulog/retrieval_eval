@@ -19,10 +19,15 @@ class Logger:
         if cls._instance is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             experiment_name = f"{source}_{timestamp}"
-            results_dir = Path("results") / experiment_name
+            
+            # 使用脚本所在目录作为基准
+            base_dir = Path(__file__).parent.resolve()
+            results_dir = base_dir / "results" / experiment_name
+            
             results_dir.mkdir(parents=True, exist_ok=True)
             cls._instance = cls(experiment_name, results_dir)
         return cls._instance
+
 
     @classmethod
     def get(cls):

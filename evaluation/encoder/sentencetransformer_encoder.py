@@ -14,10 +14,10 @@ class SentencetransformerEncoder(Encoder):
 
     def __init__(self, model_name, **kwargs):
         from sentence_transformers import SentenceTransformer
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer(model_name,trust_remote_code=True)
         self.max_length = kwargs.get("max_length", 1024)
 
-    def _encode_image(self, texts: List[str], batch_size: int = 32):
+    def encode(self, texts: List[str], batch_size: int = 2):
         logging.info(
             f"Encoding {len(texts)} texts with batch size {batch_size} and max length {self.max_length}..."
         )
@@ -25,18 +25,14 @@ class SentencetransformerEncoder(Encoder):
             embeddings = self.model.encode(
                 texts,
                 batch_size=batch_size,
-                max_length=self.max_length,
-                convert_to_tensor=True,
                 show_progress_bar=True,
             )
-            if not isinstance(embeddings, torch.Tensor):
-                raise ValueError("Expected tensor output from model.encode")
-
+            
             logging.info(
                 f"Encoded {embeddings.shape[0]} embeddings with dimension {embeddings.shape[1]}."
             )
 
-            return embeddings.cpu().numpy()
+            return embeddings
         except Exception as e:
             logging.error(f"Encoding failed: {str(e)}", exc_info=True)
             return numpy.array([])

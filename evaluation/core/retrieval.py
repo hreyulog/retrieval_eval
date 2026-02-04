@@ -13,7 +13,7 @@ class RetrievalEvaluator:
     and records retrieval time.
     """
 
-    def __init__(self, dataset: str, embedding_model: str, top_k: int = 5, metrics: list=["recall@1","recall@5","mrr","ndcg","f1","precision@3"]):
+    def __init__(self, dataset: str, embedding_model: str, top_k: int = 5, metrics: list=["recall@1","recall@5","mrr","ndcg"]):
         """
         Args:
             dataset (str): Dataset name or path for evaluation.
@@ -25,7 +25,7 @@ class RetrievalEvaluator:
 
         self.test_dataset = self._load_dataset(dataset)
 
-        self.retrieval_model = create_encode('automodel', embedding_model)
+        self.retrieval_model = create_encode('sentence_transformer', embedding_model)
 
         self.metrics_list = [create_metrics(name) for name in metrics]
 
