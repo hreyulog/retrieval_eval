@@ -124,3 +124,18 @@ INFO: f1@5: 0.7289
 - clip:openai/clip-vit-base-patch32
 
 ---
+
+## Citation / Preprint
+
+
+```bibtex
+@misc{he2026arktscodesearchopensourcearktsdataset,
+      title={ArkTS-CodeSearch: A Open-Source ArkTS Dataset for Code Retrieval}, 
+      author={Yulong He and Artem Ermakov and Sergey Kovalchuk and Artem Aliev and Dmitry Shalymov},
+      year={2026},
+      eprint={2602.05550},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2602.05550}, 
+}
+
