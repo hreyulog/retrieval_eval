@@ -1,8 +1,8 @@
 import time
-from typing import Dict, List
-from ..encoder.encoder_config import create_encode
+from typing import Dict, List, Optional
+# NOTE: create_encode imports heavy deps (e.g., torch). Import lazily in __init__.
 from .dataset import TestDataset
-from .metrics.metrics_config import create_metrics  
+from .metrics.metrics_config import create_metrics
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -13,7 +13,16 @@ class RetrievalEvaluator:
     and records retrieval time.
     """
 
-    def __init__(self, dataset: str, embedding_model: str, top_k: int = 5, metrics: list=["recall@1","recall@5","mrr","ndcg"]):
+    def __init__(
+        self,
+        dataset: str,
+        embedding_model: str,
+        top_k: int = 5,
+        metrics: list=["recall@1","recall@5","mrr","ndcg"],
+        backend: str = "dense",
+        pyserini_index: Optional[str] = None,
+        pyserini_threads: int = 1,
+    ):
         """
         Args:
             dataset (str): Dataset name or path for evaluation.
@@ -25,7 +34,16 @@ class RetrievalEvaluator:
 
         self.test_dataset = self._load_dataset(dataset)
 
-        self.retrieval_model = create_encode('sentence_transformer', embedding_model)
+        self.backend = backend
+        self.pyserini_index = pyserini_index
+        self.pyserini_threads = pyserini_threads
+
+        if self.backend == "dense":
+            from ..encoder.encoder_config import create_encode
+
+            self.retrieval_model = create_encode('sentence_transformer', embedding_model)
+        else:
+            self.retrieval_model = None
 
         self.metrics_list = [create_metrics(name) for name in metrics]
 
@@ -41,6 +59,31 @@ class RetrievalEvaluator:
         Encode a list of texts into embeddings using the retrieval model.
         """
         return self.retrieval_model.encode(texts)
+
+    def search_pyserini_bm25(self) -> Dict[str, List[str]]:
+        """Perform BM25 retrieval via Pyserini.
+
+        Assumes the dataset doc IDs match the IDs stored in the Pyserini index.
+        """
+        if self.pyserini_index is None:
+            raise ValueError("pyserini_index must be provided when backend=\"pyserini_bm25\"")
+
+        try:
+            from pyserini.search.lucene import LuceneSearcher
+        except Exception as e:  # pragma: no cover
+            raise ImportError(
+                "Pyserini is required for backend=\"pyserini_bm25\". Install with `pip install pyserini`."
+            ) from e
+
+        searcher = LuceneSearcher(self.pyserini_index)
+        searcher.set_bm25()
+        searcher.set_threads(self.pyserini_threads)
+
+        predictions: Dict[str, List[str]] = {}
+        for qid, query in self.test_dataset.queries.items():
+            hits = searcher.search(query, k=self.top_k)
+            predictions[qid] = [hit.docid for hit in hits]
+        return predictions
 
     def search(self, query_embeddings, doc_embeddings) -> Dict[str, List[str]]:
         """
@@ -69,10 +112,13 @@ class RetrievalEvaluator:
             Dict[str, float]: Metrics including Recall@K, Precision@K, MRR, nDCG, retrieval_time_sec
         """
         start_time = time.time()
-        query_embeddings = self.get_embedding(list(self.test_dataset.queries.values()))
-        doc_embeddings = self.get_embedding(list(self.test_dataset.docs.values()))
+        if self.backend == "pyserini_bm25":
+            predictions = self.search_pyserini_bm25()
+        else:
+            query_embeddings = self.get_embedding(list(self.test_dataset.queries.values()))
+            doc_embeddings = self.get_embedding(list(self.test_dataset.docs.values()))
 
-        predictions = self.search(query_embeddings, doc_embeddings)
+            predictions = self.search(query_embeddings, doc_embeddings)
 
         for qid in list(self.test_dataset.queries.keys()):
             pred_docs = predictions.get(qid, [])
