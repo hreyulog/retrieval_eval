@@ -139,3 +139,26 @@ INFO: f1@5: 0.7289
       url={https://arxiv.org/abs/2602.05550}, 
 }
 
+
+
+## Pyserini BM25 backend
+
+This toolkit can optionally run retrieval with **Pyserini BM25** (Lucene) instead of dense embeddings.
+
+1) Install Pyserini:
+
+```bash
+pip install pyserini
+```
+
+2) Build (or download) a Pyserini Lucene index for your corpus.
+
+3) Run retrieval evaluation with the Pyserini backend:
+
+```bash
+evaluator eval-retrieval   --dataset <DATASET_PATH_OR_NAME>   --embedding_model <IGNORED_FOR_BM25>   --top_k 5   --backend pyserini_bm25   --pyserini_index <PATH_TO_LUCENE_INDEX>
+```
+
+Notes:
+- The Lucene index document IDs must match the dataset doc IDs used during evaluation.
+- `--embedding_model` is still required by the CLI signature but is not used when `--backend pyserini_bm25`.

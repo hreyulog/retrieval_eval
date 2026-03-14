@@ -14,7 +14,10 @@ app = typer.Typer(
 def eval_retrieval(
     dataset: str = typer.Option(..., "--dataset", help="Dataset for retrieval evaluation"),
     embedding_model: str = typer.Option(..., "--embedding_model", help="Embedding model path"),
-    top_k: int = typer.Option(5,"--top_k", help="Top-K documents to consider for recall"),
+    top_k: int = typer.Option(5, "--top_k", help="Top-K documents to consider for recall"),
+    backend: str = typer.Option("dense", "--backend", help="Retrieval backend: dense | pyserini_bm25"),
+    pyserini_index: str = typer.Option(None, "--pyserini_index", help="Path to a Pyserini Lucene index (required for pyserini_bm25)"),
+    pyserini_threads: int = typer.Option(1, "--pyserini_threads", help="Pyserini search threads"),
 ):
     """
     Evaluate the retrieval performance of the RAG system.
@@ -24,7 +27,14 @@ def eval_retrieval(
     logger = Logger.create(source=dataset)
     logger.info(f"Starting retrieval evaluation on {dataset} with top-{top_k}")
 
-    evaluator = RetrievalEvaluator(dataset=dataset, embedding_model=embedding_model, top_k=top_k)
+    evaluator = RetrievalEvaluator(
+        dataset=dataset,
+        embedding_model=embedding_model,
+        top_k=top_k,
+        backend=backend,
+        pyserini_index=pyserini_index,
+        pyserini_threads=pyserini_threads,
+    )
     metrics_res = evaluator.evaluate()
     
     logger.info(f"Retrieval evaluation completed in {metrics_res['retrieval_time_sec']:.4f}s")
