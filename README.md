@@ -2,6 +2,9 @@
 
 This guide walks you through installing the RAG Evaluation Toolkit, preparing your first dataset, and running your first evaluation.
 
+## Dataset processing 
+https://github.com/hreyulog/arkts-codesearch
+
 ## Prerequisites
 
 The RAG Evaluation Toolkit requires:
@@ -10,6 +13,8 @@ The RAG Evaluation Toolkit requires:
 |------------|---------|---------|
 | Python | ≥ 3.9 | Core runtime environment |
 | pip | Latest | Package installation |
+
+
 
 ## Installation
 
@@ -20,7 +25,13 @@ git clone https://github.com/hreyulog/retrieval_eval
 cd retrieval_eval
 ```
 
-### Step 2: Install the Package
+### Step 2: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Or install the package in editable mode:
 
 ```bash
 pip install -e .
@@ -138,6 +149,7 @@ INFO: f1@5: 0.7289
       primaryClass={cs.SE},
       url={https://arxiv.org/abs/2602.05550}, 
 }
+```
 
 
 

@@ -5,15 +5,20 @@ description = "CLI and evaluation toolkit for retrieval-augmented generation (RA
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "typer",               # CLI
-    "beautifulsoup4",      # 可选，解析 HTML/PDF
-    "pdfplumber",           # PDF 解析
-    "requests",             # 网络请求
-    "python-dotenv",        # 环境变量管理
-    "datasets",             # 加载数据集
-    "numpy",                # 数值计算
-    "scikit-learn",         # cosine_similarity 等
-    "tabulate",            # pretty tables for logging
+    "typer",
+    "beautifulsoup4",
+    "pdfplumber",
+    "requests",
+    "python-dotenv",
+    "datasets",
+    "numpy",
+    "scikit-learn",
+    "tabulate",
+    "tqdm",
+    "torch",
+    "transformers",
+    "sentence-transformers",
+    "Pillow",
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,19 @@
+# Core dependencies
+typer
+beautifulsoup4
+pdfplumber
+requests
+python-dotenv
+datasets
+numpy
+scikit-learn
+tabulate
+tqdm
+
+# ML dependencies for evaluation (missing per reviewer feedback)
+torch
+transformers
+sentence-transformers
+
+# Optional for CLIP encoder
+Pillow
